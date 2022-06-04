@@ -1,17 +1,21 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ServerListItem from './ServerListItem';
+import { loadServers } from '../lib/Api';
 
 export default function ServerList() {
 
   const [servers, setServers] = useState([]);
 
   useEffect(() => {
-    setServers(axios.get('http://localhost:3001/api/v1/servers'));
+    (async () => {
+      setServers(await loadServers());
+    })();
   }, []);
 
   return (
     <div>
      List of servers
+    { servers.map((server) => <ServerListItem {...server} />) }
     </div>
   );
 }

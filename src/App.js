@@ -10,7 +10,7 @@ import {
   Routes,
 } from 'react-router-dom';
 
-import CreateServer from './components/CreateServer';
+import CreateServerForm from './components/CreateServerForm';
 import ServerList from './components/ServerList';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
         <Box width={3/4}>
           <Routes>
             <Route path="/" element={<ServerList/>} />
-            <Route path="/servers/create" element={<CreateServer/>} />
+            <Route path="/servers/create" element={<CreateServerForm/>} />
           </Routes>
         </Box>
       </Flex>

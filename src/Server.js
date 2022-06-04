@@ -24,7 +24,8 @@ const v1Controller = () => {
   });
 
   router.post('/servers', async (req, res) => {
-    const server = await serverManager.createServer(req.params.server);
+    console.log(req.body);
+    const server = await serverManager.createServer(req.body);
     res.json({ result: server });
   });
 
@@ -41,6 +42,7 @@ const v1Controller = () => {
   return router;
 };
 
+app.use(express.json());
 app.use(cors());
 app.use('/api/v1', v1Controller());
 

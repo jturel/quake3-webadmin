@@ -5,10 +5,14 @@ const server = require('./Server');
 const supertest = require('supertest');
 const api = supertest.agent(server);
 
-describe('api/v1', () => {
-  it('lists servers', (done) => {
-    api
-      .get('/api/v1/servers')
-      .expect(200, done);
-  });
+test('lists servers', (done) => {
+  api
+    .get('/api/v1/servers')
+    .expect(200, done);
+});
+
+test('creates servers', (done) => {
+  api
+    .get('/api/v1/servers')
+    .expect(200, done);
 });
