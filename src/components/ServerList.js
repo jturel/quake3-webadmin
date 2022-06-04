@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import ServerListItem from './ServerListItem';
 import { loadServers } from '../lib/Api';
+import ServerListItem from './ServerListItem';
 
 export default function ServerList() {
 
@@ -14,8 +14,8 @@ export default function ServerList() {
 
   return (
     <div>
-     List of servers
-    { servers.map((server) => <ServerListItem {...server} />) }
+      <h2>Dedicated Servers</h2>
+      { servers.map((server) => <ServerListItem key={server.id} {...server} />) }
     </div>
   );
 }

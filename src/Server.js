@@ -24,7 +24,6 @@ const v1Controller = () => {
   });
 
   router.post('/servers', async (req, res) => {
-    console.log(req.body);
     const server = await serverManager.createServer(req.body);
     res.json({ result: server });
   });
