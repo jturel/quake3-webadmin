@@ -28,6 +28,12 @@ class ServerManager {
       return null;
     });
   };
+
+  deleteServer(uuid) {
+    return this.dbConnection.get(uuid).then((doc) => {
+      return this.dbConnection.remove(doc);
+    });
+  };
 }
 
 module.exports = ServerManager;

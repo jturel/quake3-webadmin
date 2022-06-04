@@ -11,3 +11,9 @@ export const createServer = (server) => {
     return response.data.result;
   });
 };
+
+export const deleteServer = (uuid) => {
+  return axios.delete(`http://localhost:3001/api/v1/servers/${uuid}`).then((response) => {
+    return response.data.result;
+  });
+};

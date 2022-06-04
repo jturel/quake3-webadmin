@@ -4,7 +4,7 @@ import {
   Button
 } from 'rebass';
 
-export default function ServerListItem({ id, name, port, deleteServer }) {
+export default function ServerListItem({ id, name, port, handleDeleteServer }) {
   return (
     <Flex>
       <Box width={1/6}>
@@ -14,7 +14,7 @@ export default function ServerListItem({ id, name, port, deleteServer }) {
         <Button>Launch</Button>
       </Box>
       <Box width={1/6}>
-        <Button onClick={deleteServer} value={id}>Delete</Button>
+        <Button onClick={handleDeleteServer} value={id}>Delete</Button>
       </Box>
       <Box width={1/2} />
     </Flex>

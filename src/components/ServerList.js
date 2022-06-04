@@ -17,9 +17,10 @@ export default function ServerList() {
     })();
   }, []);
 
-  const deleteServer = (event) => {
-    console.log(event.target.value);
+  const handleDeleteServer = async (event) => {
+    await deleteServer(event.target.value);
     event.preventDefault();
+    setServers(servers.filter((server) => server.id !== event.target.value));
   };
 
   return (
@@ -30,7 +31,7 @@ export default function ServerList() {
           servers.map((server) => 
             <ServerListItem
               key={server.id}
-              deleteServer={deleteServer}
+              handleDeleteServer={handleDeleteServer}
               {...server}
             />
           )

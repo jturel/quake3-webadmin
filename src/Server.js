@@ -38,6 +38,11 @@ const v1Controller = () => {
     }
   });
 
+  router.delete('/servers/:uuid', async (req, res) => {
+    await serverManager.deleteServer(req.params.uuid);
+    res.json({ message: `Deleted server ${req.params.uuid}` });
+  });
+
   return router;
 };
 
