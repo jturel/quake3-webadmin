@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
-import { loadServers } from '../lib/Api';
+import { deleteServer, loadServers } from '../lib/Api';
 import ServerListItem from './ServerListItem';
+import {
+  Box,
+  Flex,
+  Heading
+} from 'rebass';
 
 export default function ServerList() {
 
@@ -12,10 +17,25 @@ export default function ServerList() {
     })();
   }, []);
 
+  const deleteServer = (event) => {
+    console.log(event.target.value);
+    event.preventDefault();
+  };
+
   return (
-    <div>
-      <h2>Dedicated Servers</h2>
-      { servers.map((server) => <ServerListItem key={server.id} {...server} />) }
-    </div>
+    <Flex>
+      <Box width={1}>
+        <Heading>Dedicated Servers</Heading>
+        {
+          servers.map((server) => 
+            <ServerListItem
+              key={server.id}
+              deleteServer={deleteServer}
+              {...server}
+            />
+          )
+        }
+      </Box>
+    </Flex>
   );
 }
