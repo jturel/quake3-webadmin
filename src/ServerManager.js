@@ -22,16 +22,17 @@ class ServerManager {
     });
   };
 
-  /*
   findServer(uuid) {
     return this.dbConnection.get(uuid).then((server) => {
+      server.id = server._id;
+      delete server._id;
+      delete server._rev;
       return server;
     }).catch((error) => {
       console.log(error);
       return null;
     });
   };
-  */
 
   deleteServer(uuid) {
     return this.dbConnection.get(uuid).then((doc) => {

@@ -6,6 +6,12 @@ export const loadServers = () => {
   });
 };
 
+export const findServer = (uuid) => {
+  return axios.get(`http://localhost:3001/api/v1/servers/${uuid}`).then((response) => {
+    return response.data.result;
+  });
+};
+
 export const createServer = (server) => {
   return axios.post('http://localhost:3001/api/v1/servers', server).then((response) => {
     return response.data.result;

@@ -30,12 +30,7 @@ const v1Controller = () => {
 
   router.get('/servers/:uuid', async (req, res) => {
     const server = await serverManager.findServer(req.params.uuid);
-
-    if (server) {
-      res.json({ result: server });
-    } else {
-      res.json({ message: 'does not exist' });
-    }
+    res.json({ result: server });
   });
 
   router.delete('/servers/:uuid', async (req, res) => {

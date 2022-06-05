@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   deleteServer,
+  findServer,
   launchServer,
   loadServers,
   stopServer,
@@ -28,17 +29,30 @@ export default function ServerList() {
     event.preventDefault();
   };
 
+  const reloadServer = async(uuid) => {
+    const reloaded = await findServer(uuid);
+
+    setServers((prevServers) => {
+      return prevServers.map((s) => {
+        if (s.id === reloaded.id) {
+          return reloaded;
+        }
+
+        return s;
+      });
+    });
+  };
+
   const handleLaunchServer = async (event) => {
     await launchServer(event.target.value);
+    await reloadServer(event.target.value);
 
-    // change this to load one server
-    setServers(await loadServers());
     event.preventDefault();
   };
 
   const handleStopServer = async (event) => {
     await stopServer(event.target.value);
-    setServers(await loadServers());
+    await reloadServer(event.target.value);
 
     event.preventDefault();
   };
