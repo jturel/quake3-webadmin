@@ -17,3 +17,15 @@ export const deleteServer = (uuid) => {
     return response.data.result;
   });
 };
+
+export const launchServer = (uuid) => {
+  return axios.post(`http://localhost:3001/api/v1/servers/${uuid}/launch`).then((response) => {
+    return response.data.result;
+  });
+};
+
+export const stopServer = (uuid) => {
+  return axios.post(`http://localhost:3001/api/v1/servers/${uuid}/stop`).then((response) => {
+    return response.data.result;
+  });
+};

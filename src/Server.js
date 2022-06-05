@@ -43,6 +43,16 @@ const v1Controller = () => {
     res.json({ message: `Deleted server ${req.params.uuid}` });
   });
 
+  router.post('/servers/:uuid/launch', async (req, res) => {
+    await serverManager.launchServer(req.params.uuid);
+    res.json({ message: `Launched server ${req.params.uuid}` });
+  });
+
+  router.post('/servers/:uuid/stop', async (req, res) => {
+    await serverManager.stopServer(req.params.uuid);
+    res.json({ message: `Stopped server ${req.params.uuid}` });
+  });
+
   return router;
 };
 

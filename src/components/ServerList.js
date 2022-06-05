@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { deleteServer, loadServers } from '../lib/Api';
+import {
+  deleteServer,
+  launchServer,
+  loadServers,
+  stopServer,
+} from '../lib/Api';
 import ServerListItem from './ServerListItem';
 import {
   Box,
@@ -19,8 +24,23 @@ export default function ServerList() {
 
   const handleDeleteServer = async (event) => {
     await deleteServer(event.target.value);
-    event.preventDefault();
     setServers(servers.filter((server) => server.id !== event.target.value));
+    event.preventDefault();
+  };
+
+  const handleLaunchServer = async (event) => {
+    await launchServer(event.target.value);
+
+    // change this to load one server
+    setServers(await loadServers());
+    event.preventDefault();
+  };
+
+  const handleStopServer = async (event) => {
+    await stopServer(event.target.value);
+    setServers(await loadServers());
+
+    event.preventDefault();
   };
 
   return (
@@ -31,7 +51,9 @@ export default function ServerList() {
           servers.map((server) => 
             <ServerListItem
               key={server.id}
+              handleLaunchServer={handleLaunchServer}
               handleDeleteServer={handleDeleteServer}
+              handleStopServer={handleStopServer}
               {...server}
             />
           )
