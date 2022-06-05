@@ -5,6 +5,7 @@ import {
   launchServer,
   loadServers,
   stopServer,
+  updateServer,
 } from '../lib/Api';
 import ServerListItem from './ServerListItem';
 import {
@@ -26,6 +27,25 @@ export default function ServerList() {
   const handleDeleteServer = async (event) => {
     await deleteServer(event.target.value);
     setServers(servers.filter((server) => server.id !== event.target.value));
+    event.preventDefault();
+  };
+
+  const handleUpdateVar = (uuid, event) => {
+    const server = servers.find((s) => s.id === uuid);
+    setServers((prevServers) => {
+      return prevServers.map((prev) => {
+        if (prev.id === uuid) {
+          return { ...prev, vars: { ...prev.vars, [event.target.name]: event.target.value } };
+        } else {
+          return { ...prev }
+        }
+      });
+    });
+  };
+
+  const handleUpdateServer = async (event) => {
+    await updateServer();
+
     event.preventDefault();
   };
 
@@ -68,7 +88,8 @@ export default function ServerList() {
               handleLaunchServer={handleLaunchServer}
               handleDeleteServer={handleDeleteServer}
               handleStopServer={handleStopServer}
-              {...server}
+              handleUpdateVar={handleUpdateVar}
+              server={server}
             />
           )
         }

@@ -4,27 +4,37 @@ import {
   Button
 } from 'rebass';
 
+import React, { useState } from 'react';
+import ServerListItemDetails from './ServerListItemDetails';
+
 export default function ServerListItem({
-  id,
-  name,
-  pid,
-  port,
   handleDeleteServer,
   handleLaunchServer,
   handleStopServer,
-  isRunning,
+  handleUpdateVar,
+  server,
 }) {
 
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
+
   return (
-    <Flex mb={1}>
-      <Box width={200}>
-        { name }:{ port }
-      </Box>
-      <Box width={300}>
-        <Button mr={1} onClick={handleLaunchServer} value={id} disabled={pid}>Launch</Button>
-        <Button mr={1} onClick={handleStopServer} value={id} disabled={!pid}>Stop</Button>
-        <Button onClick={handleDeleteServer} value={id}>Delete</Button>
-      </Box>
-    </Flex>
+    <React.Fragment>
+      <Flex mb={1}>
+        <Box width={200}>
+          { server.vars.sv_hostname }:{ server.vars.sv_port }
+        </Box>
+        <Box width={400}>
+          <Button mr={1} onClick={handleLaunchServer} value={server.id} disabled={server.pid}>Launch</Button>
+          <Button mr={1} onClick={handleStopServer} value={server.id} disabled={!server.pid}>Stop</Button>
+          <Button mr={1} onClick={handleExpand}>Expand</Button>
+          <Button onClick={handleDeleteServer} value={server.id}>Delete</Button>
+        </Box>
+      </Flex>
+      { expanded && <ServerListItemDetails handleUpdateVar={handleUpdateVar} server={server} /> }
+    </React.Fragment>
   );
 };

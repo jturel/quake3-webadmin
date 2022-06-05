@@ -1,17 +1,22 @@
 const express = require('express');
 const PouchDB = require('pouchdb');
 const cors = require('cors');
+const nocache = require('nocache');
 
 const port = process.env.Q3WEBADMIN_API_PORT || 3001;
 const db = process.env.Q3WEBADMIN_API_DB || '/home/jturel/.config/quake3-webadmin/pouchdb';
+const configPath = '/home/jturel/.q3a/baseq3';
 const dbConnection = new PouchDB(db);
+const logger = require('./lib/Logger')
+const ApiServerPresenter = require('./ApiServerPresenter');
 
 dbConnection.info().then((info) => {
-  console.log("Opened database connection to " + info.db_name);
+  logger.info(`Opened database connection to ${info.db_name}`);
 });
 
 const ServerManager = require('./ServerManager');
-const serverManager = new ServerManager(dbConnection);
+const executable = '/home/jturel/code/ioq3-main/build/release-linux-x86_64/ioq3ded.x86_64';
+const serverManager = new ServerManager({ db: dbConnection, configPath, executable });
 
 const app = express();
 
@@ -20,7 +25,8 @@ const v1Controller = () => {
 
   router.get('/servers', async (req, res) => {
     const servers = await serverManager.allServers();
-    res.json({ result: servers });
+    const presented = servers.map(ApiServerPresenter);
+    res.json({ result: presented });
   });
 
   router.post('/servers', async (req, res) => {
@@ -30,6 +36,11 @@ const v1Controller = () => {
 
   router.get('/servers/:uuid', async (req, res) => {
     const server = await serverManager.findServer(req.params.uuid);
+    res.json({ result: ApiServerPresenter(server) });
+  });
+
+  router.put('/servers/:uuid', async (req, res) => {
+    const server = await serverManager.updateServer(req.body);
     res.json({ result: server });
   });
 
@@ -53,8 +64,9 @@ const v1Controller = () => {
 
 app.use(express.json());
 app.use(cors());
+app.use(nocache());
 app.use('/api/v1', v1Controller());
 
 module.exports = app.listen(port, () => {
-  console.log("API started");
+  logger.info("API started");
 });

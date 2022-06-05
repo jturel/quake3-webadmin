@@ -1,42 +1,56 @@
 const crypto = require('crypto');
 const { spawn } = require('node:child_process');
+const fs = require('fs');
+const ApiServerPresenter = require('./ApiServerPresenter');
+
+const logger = require('./lib/Logger')
 
 class ServerManager {
-  constructor(dbConnection) {
-    this.dbConnection = dbConnection;
-    this.runningServers = {};
+  constructor({ db, executable, configPath }) {
+    this.db = db;
+    this.executable = executable;
+    this.configPath = configPath;
   };
 
   createServer(server) {
-    this.dbConnection.put({ ...server, _id: crypto.randomUUID() });
+    return this.db.put({ ...server, _id: crypto.randomUUID() })
+      .then((result) => {
+        logger.info("Created server", { uuid: result.id });
+      });
   };
 
   allServers() {
-    return this.dbConnection.allDocs({ include_docs: true }).then((result) => {
-      return result.rows.map((row) => {
-        const id = row.doc['_id'];
-        delete row.doc['_id'];
-        delete row.doc['_rev'];
-        return { ...row.doc, id};
-      });
-    });
+    return this.db
+      .allDocs({ include_docs: true })
+      .then((result) => result.rows.map((r) => r.doc));
   };
 
   findServer(uuid) {
-    return this.dbConnection.get(uuid).then((server) => {
-      server.id = server._id;
-      delete server._id;
-      delete server._rev;
+    return this.db.get(uuid).then((server) => {
       return server;
     }).catch((error) => {
-      console.log(error);
+      logger.error(error);
       return null;
     });
   };
 
+  updateServer(server) {
+    return this.db.get(server.id).then((doc) => {
+      const updated = {...doc, vars: server.vars };
+
+      return this.db.put(updated).then((result) => {
+        logger.info("Updated server", { uuid: server.id, pid: server.pid });
+
+        return true;
+      });
+    });
+  };
+
   deleteServer(uuid) {
-    return this.dbConnection.get(uuid).then((doc) => {
-      return this.dbConnection.remove(doc);
+    return this.db.get(uuid).then((doc) => {
+      return this.db.remove(doc).then(() => {
+        logger.info("Deleted server", { uuid });
+      });
     });
   };
 
@@ -44,7 +58,7 @@ class ServerManager {
     const server = this.runningServers[uuid];
     if (server) {
       delete this.runningServers[uuid];
-      console.log(`Cleaned up server=${uuid} pid=${server.pid}`);
+      logger.info(`Cleaned up server=${uuid} pid=${server.pid}`);
     }
   };
 
@@ -58,46 +72,62 @@ class ServerManager {
   };
 
   clearServerPid(uuid) {
-    return this.dbConnection.get(uuid).then((doc) => {
+    return this.db.get(uuid).then((doc) => {
       delete doc.pid;
-      this.dbConnection.put(doc);
+      this.db.put(doc);
     });
   };
 
   stopServer(uuid) {
-    this.dbConnection.get(uuid).then((doc) => {
+    this.db.get(uuid).then((doc) => {
       if (doc.pid) {
         if (this.isPidRunning(doc.pid)) {
           process.kill(doc.pid);
         }
 
         this.clearServerPid(uuid).then(() => {
-          console.log(`Stopped server=${uuid} pid=${doc.pid}`);
+          logger.info('Stopped server', { server: uuid, pid: doc.pid});
         });
       } else {
-        console.log("Server wasn't running");
+        logger.info("Server wasn't running", { server: uuid, pid: null });
       }
     });
   };
 
+  writeConfig(configFile, doc) {
+    const vars = Object.keys(doc.vars || {});
+
+    const content = vars
+      .map((k) => `seta ${k} ${doc.vars[k]}`)
+      .join("\n");
+
+    try {
+      fs.writeFileSync(configFile, content);
+    } catch (error) {
+      logger.error(`Unable to write config to ${configFile}`);
+      return false;
+    }
+
+    logger.info(`Wrote ${configFile}`);
+    return true;
+  };
+
   launchServer(uuid) {
-    return this.dbConnection.get(uuid).then((doc) => {
-      console.log(`Launching server=${uuid}`);
+    return this.db.get(uuid).then((doc) => {
+      logger.info('Launching server', { server: uuid });
 
-      const exec = '/home/jturel/code/ioq3-main/build/release-linux-x86_64/ioq3ded.x86_64';
-      const server = spawn(exec, ['+exec', 'server.cfg']); 
+      const configName = `server-${uuid}.cfg`
+      const configFile = `${this.configPath}/${configName}`;
+      if(!this.writeConfig(configFile, doc)) {
+        return false;
+      };
 
-      server.on('close', () => {
-        this.clearServerPid(uuid).then(() => {
-          console.log(`Cleared PID for server=${uuid} pid=${server.pid}`);
-        });
-      });
+      const server = spawn(this.executable, ['+exec', configName]); 
 
       doc.pid = server.pid
-      this.dbConnection.put(doc);
+      this.db.put(doc);
 
-      console.log(`Launched server=${uuid} pid=${server.pid}`);
-      return true;
+      logger.info('Launched server', { server: uuid, pid: server.pid });
     });
   };
 }

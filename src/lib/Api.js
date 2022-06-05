@@ -18,6 +18,12 @@ export const createServer = (server) => {
   });
 };
 
+export const updateServer = (server) => {
+  return axios.put(`http://localhost:3001/api/v1/servers/${server.id}`, server).then((response) => {
+    return response.data.result;
+  });
+};
+
 export const deleteServer = (uuid) => {
   return axios.delete(`http://localhost:3001/api/v1/servers/${uuid}`).then((response) => {
     return response.data.result;

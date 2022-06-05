@@ -9,7 +9,12 @@ export default function CreateServerForm() {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    await createServer({ name, port });
+    await createServer({
+      vars: {
+        sv_hostname: name,
+        sv_port: port,
+      },
+    });
     navigate('/');
   };
 
