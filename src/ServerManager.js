@@ -47,19 +47,24 @@ class ServerManager {
   };
 
   deleteServer(uuid) {
-    return this.db.get(uuid).then((doc) => {
-      return this.db.remove(doc).then(() => {
-        logger.info("Deleted server", { uuid });
+    return this.stopServer(uuid).then((result) => {
+      return this.db.get(uuid).then((doc) => {
+        return this.db.remove(doc).then((result) => {
+          const configName = `server-${uuid}.cfg`
+          const configFile = `${this.configPath}/${configName}`;
+
+          try {
+            if (fs.existsSync(configFile)) {
+              this.deleteConfig(configFile);
+            }
+          } catch(e) {
+            logger.error(`Couldn't read ${configFile}`);
+          }
+
+          logger.info("Deleted server", { uuid });
+        });
       });
     });
-  };
-
-  cleanupServer(uuid) {
-    const server = this.runningServers[uuid];
-    if (server) {
-      delete this.runningServers[uuid];
-      logger.info(`Cleaned up server=${uuid} pid=${server.pid}`);
-    }
   };
 
   isPidRunning(pid) {
@@ -71,25 +76,18 @@ class ServerManager {
     }
   };
 
-  clearServerPid(uuid) {
-    return this.db.get(uuid).then((doc) => {
-      delete doc.pid;
-      this.db.put(doc);
-    });
-  };
-
   stopServer(uuid) {
-    this.db.get(uuid).then((doc) => {
+    return this.db.get(uuid).then((doc) => {
       if (doc.pid) {
         if (this.isPidRunning(doc.pid)) {
           process.kill(doc.pid);
         }
 
-        this.clearServerPid(uuid).then(() => {
+        delete doc.pid;
+        return this.db.put(doc).then((result) => {
           logger.info('Stopped server', { server: uuid, pid: doc.pid});
+          return result;
         });
-      } else {
-        logger.info("Server wasn't running", { server: uuid, pid: null });
       }
     });
   };
@@ -110,6 +108,15 @@ class ServerManager {
 
     logger.info(`Wrote ${configFile}`);
     return true;
+  };
+
+  deleteConfig(configFile) {
+    try {
+      fs.unlinkSync(configFile);
+      logger.info(`Deleted ${configFile}`)
+    } catch(e) {
+      logger.error(`Couldn't delete ${configFile}`)
+    }
   };
 
   launchServer(uuid) {

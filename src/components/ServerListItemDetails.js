@@ -9,8 +9,6 @@ import {
   Label,
 } from '@rebass/forms';
 
-import { useState } from 'react';
-
 import { updateServer } from '../lib/Api';
 
 export default function ServerListItemDetails({ handleUpdateVar, server }) {

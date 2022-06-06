@@ -5,7 +5,6 @@ import {
   launchServer,
   loadServers,
   stopServer,
-  updateServer,
 } from '../lib/Api';
 import ServerListItem from './ServerListItem';
 import {
@@ -31,7 +30,6 @@ export default function ServerList() {
   };
 
   const handleUpdateVar = (uuid, event) => {
-    const server = servers.find((s) => s.id === uuid);
     setServers((prevServers) => {
       return prevServers.map((prev) => {
         if (prev.id === uuid) {
@@ -41,12 +39,6 @@ export default function ServerList() {
         }
       });
     });
-  };
-
-  const handleUpdateServer = async (event) => {
-    await updateServer();
-
-    event.preventDefault();
   };
 
   const reloadServer = async(uuid) => {

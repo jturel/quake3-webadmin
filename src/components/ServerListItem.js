@@ -1,7 +1,8 @@
 import {
-  Flex,
   Box,
-  Button
+  Button,
+  Flex,
+  Text,
 } from 'rebass';
 
 import React, { useState } from 'react';
@@ -25,7 +26,9 @@ export default function ServerListItem({
     <React.Fragment>
       <Flex mb={1}>
         <Box width={200}>
-          { server.vars.sv_hostname }:{ server.vars.sv_port }
+          <Text>
+            { server.vars.sv_hostname }:{ server.vars.sv_port }
+          </Text>
         </Box>
         <Box width={400}>
           <Button mr={1} onClick={handleLaunchServer} value={server.id} disabled={server.pid}>Launch</Button>
