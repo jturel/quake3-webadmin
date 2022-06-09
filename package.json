@@ -2,6 +2,7 @@
   "name": "quake3-webadmin",
   "version": "0.1.0",
   "private": true,
+  "main": "public/electron.js",
   "dependencies": {
     "@rebass/forms": "^4.0.6",
     "@testing-library/jest-dom": "^5.16.4",
@@ -21,11 +22,12 @@
     "winston": "^3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "electron": "electron ."
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "electron": "^19.0.3",
     "nodemon": "^2.0.16",
     "supertest": "^6.2.3"
   }
