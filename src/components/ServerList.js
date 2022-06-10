@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   deleteServer,
   findServer,
   launchServer,
   loadServers,
   stopServer,
+  updateServer as apiUpdateServer,
 } from '../lib/Api';
+
 import ServerListItem from './ServerListItem';
+import CreateServerForm from './CreateServerForm';
+
 import {
   Box,
   Flex,
@@ -16,6 +20,7 @@ import {
 export default function ServerList() {
 
   const [servers, setServers] = useState([]);
+  const [creating] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,16 +31,20 @@ export default function ServerList() {
   const handleDeleteServer = async (event) => {
     await deleteServer(event.target.value);
     setServers(servers.filter((server) => server.id !== event.target.value));
-    event.preventDefault();
   };
 
-  const handleUpdateVar = (uuid, event) => {
+  const handleSaveServer = async (event) => {
+    const server = servers.find((s) => s.id === event.target.value);
+    await apiUpdateServer(server);
+  };
+
+  const updateServer = (server) => {
     setServers((prevServers) => {
       return prevServers.map((prev) => {
-        if (prev.id === uuid) {
-          return { ...prev, vars: { ...prev.vars, [event.target.name]: event.target.value } };
+        if (prev.id === server.id) {
+          return server;
         } else {
-          return { ...prev }
+          return prev;
         }
       });
     });
@@ -43,36 +52,24 @@ export default function ServerList() {
 
   const reloadServer = async(uuid) => {
     const reloaded = await findServer(uuid);
-
-    setServers((prevServers) => {
-      return prevServers.map((s) => {
-        if (s.id === reloaded.id) {
-          return reloaded;
-        }
-
-        return s;
-      });
-    });
+    updateServer(reloaded);
   };
 
   const handleLaunchServer = async (event) => {
     await launchServer(event.target.value);
     await reloadServer(event.target.value);
-
-    event.preventDefault();
   };
 
   const handleStopServer = async (event) => {
     await stopServer(event.target.value);
     await reloadServer(event.target.value);
-
-    event.preventDefault();
   };
 
   return (
-    <Flex>
-      <Box width={1}>
+    <Flex name="server-list">
+      <Box width={1} ml="auto">
         <Heading>Dedicated Servers</Heading>
+        { creating && <CreateServerForm /> }
         {
           servers.map((server) => 
             <ServerListItem
@@ -80,7 +77,8 @@ export default function ServerList() {
               handleLaunchServer={handleLaunchServer}
               handleDeleteServer={handleDeleteServer}
               handleStopServer={handleStopServer}
-              handleUpdateVar={handleUpdateVar}
+              handleSaveServer={handleSaveServer}
+              handleUpdateServer={updateServer}
               server={server}
             />
           )

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
 } from 'rebass';
 
@@ -17,22 +18,20 @@ function App() {
   return (
     <BrowserRouter>
       <Flex>
-        <Box width={1/4}>
-          <ul>
-            <li>
-              <Link to="/">Servers</Link>
-            </li>
-            <li>
-              <Link to="/servers/create">Create Server</Link>
-            </li>
-          </ul>
+        <Box width={1} display="flex" flexDirection="row-reverse">
+          <Link to="/servers/create">
+            <Button>
+              Create Server
+            </Button>
+          </Link>
         </Box>
-        <Box width={3/4}>
+        <Box width={1600}>
           <Routes>
             <Route path="/" element={<ServerList/>} />
             <Route path="/servers/create" element={<CreateServerForm/>} />
           </Routes>
         </Box>
+        <Box width={1} />
       </Flex>
     </BrowserRouter>
   );

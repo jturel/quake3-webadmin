@@ -9,24 +9,28 @@ import {
   Label,
 } from '@rebass/forms';
 
-import { updateServer } from '../lib/Api';
+import { SERVER_OPTIONS } from '../lib/ServerOptions';
 
-export default function ServerListItemDetails({ handleUpdateVar, server }) {
-  const handleUpdate = async (event) => {
-    await updateServer(server);
-
-    event.preventDefault();
+export default function ServerListItemDetails({ updateServer, handleSubmit, server }) {
+  const handleUpdateVar = (event) => {
+    updateServer({
+      ...server,
+      vars: {
+        ...server.vars,
+        [event.target.name]: event.target.value,
+      }
+    });
   };
 
   const varFields = () => {
-    return Object.keys(server.vars).map((varName) => {
+    return SERVER_OPTIONS.map((option) => {
       return (
         <Box px={2}>
-          <Label>{varName}</Label>
+          <Label>{option.name}</Label>
           <Input
-            value={server.vars[varName] || ''}
-            name={varName}
-            onChange={(e) => handleUpdateVar(server.id, e)}
+            value={server.vars[option.name] || ''}
+            name={option.name}
+            onChange={handleUpdateVar}
           />
         </Box>
       );
@@ -52,16 +56,14 @@ export default function ServerListItemDetails({ handleUpdateVar, server }) {
 
   return(
     <Box
-      as="form"
       pb={2}
-      onSubmit={(e) => e.preventDefault()}
     >
-      { groupedVarFields() }
-      <Flex>
-        <Box px={2} width={1}>
-          <Button onClick={handleUpdate}>Save</Button>
-        </Box>
-      </Flex>
+      <Box height={300} overflow="auto">
+        { groupedVarFields() }
+      </Box>
+      <Box pt={4}>
+        <Button value={server.id} onClick={handleSubmit}>Submit</Button>
+      </Box>
     </Box>
   );
 };

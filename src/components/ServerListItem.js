@@ -11,8 +11,9 @@ import ServerListItemDetails from './ServerListItemDetails';
 export default function ServerListItem({
   handleDeleteServer,
   handleLaunchServer,
+  handleSaveServer,
   handleStopServer,
-  handleUpdateVar,
+  handleUpdateServer,
   server,
 }) {
 
@@ -27,17 +28,17 @@ export default function ServerListItem({
       <Flex mb={1}>
         <Box width={200}>
           <Text>
-            { server.vars.sv_hostname }:{ server.vars.sv_port }
+            { server.vars.sv_hostname }:{ server.vars.net_port }
           </Text>
         </Box>
-        <Box width={400}>
+        <Box wiDTH={400}>
           <Button mr={1} onClick={handleLaunchServer} value={server.id} disabled={server.pid}>Launch</Button>
           <Button mr={1} onClick={handleStopServer} value={server.id} disabled={!server.pid}>Stop</Button>
           <Button mr={1} onClick={handleExpand}>Expand</Button>
           <Button onClick={handleDeleteServer} value={server.id}>Delete</Button>
         </Box>
       </Flex>
-      { expanded && <ServerListItemDetails handleUpdateVar={handleUpdateVar} server={server} /> }
+      { expanded && <ServerListItemDetails updateServer={handleUpdateServer} handleSubmit={handleSaveServer} server={server} /> }
     </React.Fragment>
   );
 };
