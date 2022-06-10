@@ -13,13 +13,15 @@ export const findServer = (uuid) => {
 };
 
 export const createServer = (server) => {
-  return axios.post('http://localhost:3001/api/v1/servers', server).then((response) => {
+  const cleaned = { ...server, vars: server.vars.filter((v) => v !== null) };
+  return axios.post('http://localhost:3001/api/v1/servers', cleaned).then((response) => {
     return response.data.result;
   });
 };
 
 export const updateServer = (server) => {
-  return axios.put(`http://localhost:3001/api/v1/servers/${server.id}`, server).then((response) => {
+  const cleaned = { ...server, vars: server.vars.filter((v) => v !== null) };
+  return axios.put(`http://localhost:3001/api/v1/servers/${server.id}`, cleaned).then((response) => {
     return response.data.result;
   });
 };

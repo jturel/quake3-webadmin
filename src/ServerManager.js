@@ -41,7 +41,7 @@ class ServerManager {
       return this.db.put(updated).then((result) => {
         logger.info("Updated server", { uuid: server.id, pid: server.pid });
 
-        return true;
+       return true;
       });
     });
   };
@@ -129,7 +129,15 @@ class ServerManager {
         return false;
       };
 
-      const server = spawn(this.executable, ['+exec', configName]); 
+      let options = ['+exec', configName];
+      
+      // TODO store metadata for which vars need to be on the executable
+      if (doc.vars['map']) {
+        options.push('+map');
+        options.push(doc.vars['map']);
+      };
+
+      const server = spawn(this.executable, options); 
 
       doc.pid = server.pid
       this.db.put(doc);

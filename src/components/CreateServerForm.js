@@ -6,8 +6,15 @@ import ServerListItemDetails from './ServerListItemDetails';
 import { SERVER_OPTIONS } from '../lib/ServerOptions';
 
 export default function CreateServerForm() {
+  const defaultOptions = () => {
+    let options = {};
+    SERVER_OPTIONS.forEach((o) => {
+      options[o.name] = o.default;
+    });
+    return options;
+  };
 
-  const [server, setServer] = useState({ vars: SERVER_OPTIONS });
+  const [server, setServer] = useState({ vars: defaultOptions() });
 
   const navigate = useNavigate();
 

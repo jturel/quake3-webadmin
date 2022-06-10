@@ -6,7 +6,22 @@ const SERVER_OPTIONS = [
     name: 'net_port',
   },
   {
+    name: 'net_ip',
+  },
+  {
     name: 'g_motd',
+  },
+  {
+    name: 'map',
+  },
+  {
+    name: 'dedicated',
+  },
+  {
+    name: 'g_log',
+  },
+  {
+    name: 'logfile',
   },
   {
     name: 'timelimit',

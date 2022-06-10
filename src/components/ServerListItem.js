@@ -31,7 +31,7 @@ export default function ServerListItem({
             { server.vars.sv_hostname }:{ server.vars.net_port }
           </Text>
         </Box>
-        <Box wiDTH={400}>
+        <Box width={400}>
           <Button mr={1} onClick={handleLaunchServer} value={server.id} disabled={server.pid}>Launch</Button>
           <Button mr={1} onClick={handleStopServer} value={server.id} disabled={!server.pid}>Stop</Button>
           <Button mr={1} onClick={handleExpand}>Expand</Button>
