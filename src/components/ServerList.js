@@ -17,15 +17,13 @@ import {
   Heading
 } from 'rebass';
 
-export default function ServerList() {
+export default function ServerList({ addNotification }) {
 
   const [servers, setServers] = useState([]);
   const [creating] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      setServers(await loadServers());
-    })();
+    loadServers().then(setServers);
   }, []);
 
   const handleDeleteServer = async (event) => {
@@ -36,6 +34,7 @@ export default function ServerList() {
   const handleSaveServer = async (event) => {
     const server = servers.find((s) => s.id === event.target.value);
     await apiUpdateServer(server);
+    addNotification("Updated server!");
   };
 
   const updateServer = (server) => {

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ServerListItemDetails from './ServerListItemDetails';
 import { SERVER_OPTIONS } from '../lib/ServerOptions';
 
-export default function CreateServerForm() {
+export default function CreateServerForm({addNotification}) {
   const defaultOptions = () => {
     let options = {};
     SERVER_OPTIONS.forEach((o) => {
@@ -20,6 +20,7 @@ export default function CreateServerForm() {
 
   const handleSubmit = async () => {
     await createServer(server);
+    addNotification('Server created');
     navigate('/');
   };
 
