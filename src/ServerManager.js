@@ -3,7 +3,7 @@ const { spawn } = require('node:child_process');
 const fs = require('fs');
 const ApiServerPresenter = require('./ApiServerPresenter');
 
-const logger = require('./lib/Logger')
+const logger = require('./lib/Logger')();
 
 class ServerManager {
   constructor({ db, executable, configPath }) {

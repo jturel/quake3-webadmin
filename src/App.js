@@ -12,14 +12,34 @@ import {
   Routes,
 } from 'react-router-dom';
 
+import { useEffect, useRef } from 'react';
+
 import CreateServerForm from './components/CreateServerForm';
 import NotificationsSidebar from './components/NotificationsSidebar';
 import ServerList from './components/ServerList';
 import useNotifications from './useNotifications';
 
 function App() {
-  //const ws = new WebSocket("wss://localhost");
   const [notifications, addNotification] = useNotifications();
+  const ws = useRef(null);
+
+  useEffect(() => {
+    if (!ws.current) {
+      ws.current = new WebSocket("ws://localhost:3001/ws");
+      ws.current.onopen = () => console.log("Opened WebSocket connection.");
+      ws.current.onclose = () => console.log("Closed WebSocket connection.");
+      ws.current.onmessage = (event) => {
+        console.log(event.data);
+        addNotification(JSON.parse(event.data).message);
+      };
+
+      return () => {
+        if (ws.current.readyState === 1) {
+          ws.current.close();
+        }
+      };
+    }
+  }, [addNotification]);
 
   return (
     <BrowserRouter>

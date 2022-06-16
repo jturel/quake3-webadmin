@@ -34,7 +34,6 @@ export default function ServerList({ addNotification }) {
   const handleSaveServer = async (event) => {
     const server = servers.find((s) => s.id === event.target.value);
     await apiUpdateServer(server);
-    addNotification("Updated server!");
   };
 
   const updateServer = (server) => {
