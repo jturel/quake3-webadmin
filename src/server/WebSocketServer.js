@@ -1,5 +1,5 @@
 const ws = require('ws');
-const { WebsocketServer } = require('./lib/WinstonWebsocketTransport');
+const { WebsocketServer } = require('./WinstonWebsocketTransport');
 
 module.exports = async (expressServer) => {
   const server = WebsocketServer;

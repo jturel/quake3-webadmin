@@ -3,7 +3,7 @@ import { createServer } from '../lib/Api';
 import { useNavigate } from 'react-router-dom';
 
 import ServerListItemDetails from './ServerListItemDetails';
-import { SERVER_OPTIONS } from '../lib/ServerOptions';
+import { SERVER_OPTIONS } from '../shared/ServerOptions';
 
 export default function CreateServerForm({addNotification}) {
   const defaultOptions = () => {

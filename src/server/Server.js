@@ -7,7 +7,7 @@ const port = process.env.Q3WEBADMIN_API_PORT || 3001;
 const db = process.env.Q3WEBADMIN_API_DB || '/home/jturel/.config/quake3-webadmin/pouchdb';
 const configPath = '/home/jturel/.q3a/baseq3';
 const dbConnection = new PouchDB(db);
-const Logger = require('./lib/Logger')
+const Logger = require('./Logger')
 const ApiServerPresenter = require('./ApiServerPresenter');
 
 const logger = Logger();

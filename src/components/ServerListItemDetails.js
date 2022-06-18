@@ -9,7 +9,7 @@ import {
   Label,
 } from '@rebass/forms';
 
-import { SERVER_OPTIONS } from '../lib/ServerOptions';
+import { SERVER_OPTIONS } from '../shared/ServerOptions';
 
 export default function ServerListItemDetails({ updateServer, handleSubmit, server }) {
   const handleUpdateVar = (event) => {
