@@ -1,6 +1,6 @@
 const path = require('path');
 const { app, BrowserWindow } = require('electron');
-const server = require('../src/Server.js');
+//const server = require('../../src/Server.js');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -12,7 +12,8 @@ function createWindow() {
   });
 
   win.loadURL(
-    'http://localhost:3000'
+//    'http://localhost:3000'
+    `file://${path.join(__dirname, '../index.html')}`
   );
 
   //win.webContents.openDevTools({ mode: 'detach' });
