@@ -32,12 +32,6 @@ function App() {
         console.log(event.data);
         addNotification(JSON.parse(event.data).message);
       };
-
-      return () => {
-        if (ws.current.readyState === 1) {
-          ws.current.close();
-        }
-      };
     }
   }, [addNotification]);
 

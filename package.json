@@ -2,13 +2,12 @@
   "name": "quake3-webadmin",
   "version": "0.1.0",
   "private": true,
-  "main": "build/electron/main.js",
+  "main": "electron.js",
   "description": "Quake 3 Server Web UI",
   "homepage": ".",
   "author": "Jonathon Turel <jturel@gmail.com>",
   "build": {
     "appId": "q3webadmin",
-    "extends": null,
     "files": [
       "build/**/*"
     ],
@@ -36,7 +35,7 @@
   "scripts": {
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
-    "package": "npm run build && cp src/Server.js build/ && electron-builder build",
+    "package": "npm run build && cp electron.js build/ && mkdir build/src && cp src/server -R build/src/ && cp src/shared -R build/src/ && electron-builder build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/",
