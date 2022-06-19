@@ -79,6 +79,6 @@ const server = app.listen(port, () => {
   logger.info("API started");
 });
 
-const wss = WebSocketServer(server);
+WebSocketServer(server);
 
 module.exports = server;

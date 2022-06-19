@@ -4,10 +4,6 @@ const ws = require('ws');
 const WebsocketServer = new ws.Server({ noServer: true, path: '/ws' });
 
 class WebsocketTransport extends Transport {
-  constructor(options) {
-    super(options);
-  };
-
   log(info, callback) {
 
     setImmediate(() => {
