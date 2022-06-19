@@ -3,11 +3,14 @@ const PouchDB = require('pouchdb');
 const cors = require('cors');
 const nocache = require('nocache');
 
-const db = process.env.Q3WEBADMIN_API_DB || '/home/jturel/.config/quake3-webadmin/pouchdb';
-const configPath = '/home/jturel/.q3a/baseq3';
-const dbConnection = new PouchDB(db);
 const ApiServerPresenter = require('./ApiServerPresenter');
+const Config = require('./Config')();
+const ServerManager = require('./ServerManager');
 
+console.log('Config loaded');
+console.log(Config);
+
+const dbConnection = new PouchDB(Config.dbPath);
 dbConnection.info().then((info) => {
   console.log(`Opened database connection to ${info.db_name}`);
 });
@@ -18,9 +21,11 @@ const closeDbConnection = () => {
   });
 };
 
-const ServerManager = require('./ServerManager');
-const executable = '/home/jturel/code/ioq3-main/build/release-linux-x86_64/ioq3ded.x86_64';
-const serverManager = new ServerManager({ db: dbConnection, configPath, executable });
+const serverManager = new ServerManager({
+  db: dbConnection,
+  configPath: Config.baseQ3Path,
+  executable: Config.quakeExecutable
+});
 
 const ServerMonitor = require('./ServerMonitor');
 const serverMonitor = new ServerMonitor({ serverManager });
