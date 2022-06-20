@@ -12,14 +12,19 @@
       "build/**/*"
     ],
     "linux": {
-      "publish": ["github"],
-      "target": ["AppImage"]
+      "publish": [
+        "github"
+      ],
+      "target": [
+        "AppImage"
+      ]
     }
   },
   "dependencies": {
     "@rebass/forms": "^4.0.6",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "nocache": "^3.0.4",
     "pouchdb": "^7.3.0",
@@ -34,7 +39,7 @@
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "package": "npm run build && cp electron.js build/ && mkdir build/src && cp src/server -R build/src/ && cp src/shared -R build/src/ && electron-builder build",
-    "test": "react-scripts test",
+    "test": "NODE_ENV=test react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/",
     "electron": "electron ."

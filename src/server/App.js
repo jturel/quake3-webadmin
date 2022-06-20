@@ -24,7 +24,7 @@ const closeDbConnection = () => {
 const serverManager = new ServerManager({
   db: dbConnection,
   configPath: Config.baseQ3Path,
-  executable: Config.quakeExecutable
+  executable: Config.q3Executable,
 });
 
 const ServerMonitor = require('./ServerMonitor');

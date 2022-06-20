@@ -1,13 +1,50 @@
-const os = require('os');
+const dotenv = require('dotenv');
+const fs = require('fs');
+
+const dbDir = './db';
+
+const dbPath = (() => {
+  if (process.env.NODE_ENV === "test") {
+    return `${dbDir}/pouchdb.test`;
+  }
+
+  return `${dbDir}/pouchdb`;
+})();
+
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir);
+}
+
+if (!fs.existsSync(dbPath)) {
+  fs.mkdirSync(dbPath);
+}
+
+dotenv.config();
+
+const getRequired = (configKey) => {
+  if (!process.env[configKey]) {
+    throw new Error(`${configKey} wasn't specified in the environment`);
+  }
+
+  return process.env[configKey];
+};
+
+const ensureFileExists = (path) => {
+  if (!fs.existsSync(path)) {
+    throw new Error(`${path} doesn't exist`);
+  }
+}
+
+const baseQ3Path = getRequired('Q3WEBADMIN_BASEQ3_PATH');
+ensureFileExists(baseQ3Path);
+
+const q3Executable = getRequired('Q3WEBADMIN_EXECUTABLE_PATH');
+ensureFileExists(q3Executable);
 
 module.exports = () => {
-  const homeDir = os.homedir();
-  const configDir = '.config';
-  const configPath = `${homeDir}/${configDir}/quake3-webadmin`;
-
   return {
-    'dbPath': process.env.Q3WEBADMIN_DB_PATH || `${configPath}/pouchdb`,
-    'baseQ3Path': '/home/jturel/.q3a/baseq3',
-    'quakeExecutable': '/home/jturel/code/ioq3-main/build/release-linux-x86_64/ioq3ded.x86_64',
+    dbPath,
+    baseQ3Path,
+    q3Executable,
   };
 };
