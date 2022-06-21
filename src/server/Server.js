@@ -7,10 +7,27 @@ const server = app.listen(port, () => {
   console.log("API started");
 });
 
-server.on('close', () => {
-  return closeDbConnection();
+const wss = WebSocketServer(server);
+
+const stopServer = () => {
+  return new Promise((resolve, reject) => {
+    wss.close(() => {
+      console.log(`Closing ${wss.clients.size} websocket clients`);
+
+      server.close(() => {
+        resolve(closeDbConnection());
+      });
+    });
+  });
+};
+
+process.on('SIGINT', () => {
+  stopServer().then(() => {
+    process.exit(0);
+  });
 });
 
-WebSocketServer(server);
-
-module.exports = server;
+module.exports = {
+  server,
+  stopServer,
+};

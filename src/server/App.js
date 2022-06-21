@@ -16,8 +16,8 @@ dbConnection.info().then((info) => {
 });
 
 const closeDbConnection = () => {
-  return dbConnection.close().then((info) => {
-    console.log("Closed db connection");
+  return dbConnection.close(() => {
+    console.log("Closed DB connection");
   });
 };
 
@@ -26,10 +26,6 @@ const serverManager = new ServerManager({
   configPath: Config.baseQ3Path,
   executable: Config.q3Executable,
 });
-
-const ServerMonitor = require('./ServerMonitor');
-const serverMonitor = new ServerMonitor({ serverManager });
-serverMonitor.start();
 
 const app = express();
 
