@@ -1,5 +1,7 @@
-const q3Executable = '/tmp/mock-q3ded.sh';
-process.env.Q3WEBADMIN_BASEQ3_PATH = '/tmp';
+const os = require('os');
+const tmpdir = os.tmpdir();
+const q3Executable = `${tmpdir}/mock-q3ded.sh`;
+process.env.Q3WEBADMIN_BASEQ3_PATH = tmpdir;
 process.env.Q3WEBADMIN_EXECUTABLE_PATH = q3Executable;
 
 const fs = require('fs');
