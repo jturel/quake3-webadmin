@@ -48,19 +48,11 @@ test('deletes servers', (done) => {
   });
 });
 
-test('launches servers', (done) => {
-  let uuid;
-  createServer().then((response) => {
-    uuid = response.body.result;
-    return api
-      .post(`/api/v1/servers/${uuid}/launch`)
-      .expect(200);
-  }).finally(() => {
-    if (uuid) {
-      api.post(`/api/v1/servers/${uuid}/stop`);
-    }
-    done();
-  });
+test('launches servers', async () => {
+  const response = await createServer();
+  const uuid = response.body.result;
+  await api.post(`/api/v1/servers/${uuid}/launch`).expect(200);
+  await api.post(`/api/v1/servers/${uuid}/stop`).expect(200);
 });
 
 test('loads servers', (done) => {
