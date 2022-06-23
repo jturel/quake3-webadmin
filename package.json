@@ -43,6 +43,7 @@
     "build": "react-scripts build",
     "package": "npm run build && cp electron.js build/ && mkdir build/src && cp src/server -R build/src/ && cp src/shared -R build/src/ && electron-builder build",
     "test": "NODE_ENV=test react-scripts test",
+    "test:windows": "set NODE_ENV=test&&react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/",
     "electron": "electron ."
