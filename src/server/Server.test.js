@@ -1,11 +1,12 @@
 const os = require('os');
 const tmpdir = os.tmpdir();
-const q3Executable = `${tmpdir}/mock-q3ded.sh`;
+const path = require('path');
+const q3Executable = path.join(__dirname, '../../mock-q3ded.sh');
 process.env.Q3WEBADMIN_BASEQ3_PATH = tmpdir;
 process.env.Q3WEBADMIN_EXECUTABLE_PATH = q3Executable;
 
-const fs = require('fs');
-fs.copyFileSync('./mock-q3ded.sh', q3Executable);
+//const fs = require('fs');
+//fs.copyFileSync('./mock-q3ded.sh', q3Executable);
 
 const { app, closeDbConnection } = require('./App');
 const supertest = require('supertest');
@@ -28,7 +29,7 @@ const createServer = () => {
 
 afterAll(async () => {
   await closeDbConnection();
-  fs.unlinkSync(q3Executable);
+  //fs.unlinkSync(q3Executable);
 });
 
 test('lists servers', (done) => {
