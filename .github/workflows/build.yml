@@ -31,8 +31,8 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm test
-      if: ${{ matrix.os != windows-latest }}
+      if: ${{ matrix.os != 'windows-latest' }}
     - run: npm test:windows
-      if: ${{ matrix.os == windows-latest }}
+      if: ${{ matrix.os == 'windows-latest' }}
     - run: npm run lint
     - run: npm run package
