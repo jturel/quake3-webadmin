@@ -39,8 +39,8 @@ const v1Controller = () => {
   });
 
   router.post('/servers', async (req, res) => {
-    const server = await serverManager.createServer(req.body);
-    res.json({ result: server });
+    const uuid = await serverManager.createServer(req.body);
+    res.json({ result: uuid });
   });
 
   router.get('/servers/:uuid', async (req, res) => {

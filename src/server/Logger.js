@@ -2,10 +2,13 @@ const winston = require('winston');
 const { WebsocketTransport } = require('./WinstonWebsocketTransport');
 
 const logger = () => {
-  const transports = [
-    new winston.transports.Console(),
+  let transports = [
     new WebsocketTransport(),
   ];
+
+  if (process.env.NODE_ENV !== 'test') {
+    transports.push(new winston.transports.Console());
+  }
 
   return winston.createLogger({
     level: 'info',

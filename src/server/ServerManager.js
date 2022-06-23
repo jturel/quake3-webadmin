@@ -15,6 +15,7 @@ class ServerManager {
     return this.db.put({ ...server, _id: crypto.randomUUID() })
       .then((result) => {
         logger.info("Created server", { uuid: result.id });
+        return result.id;
       });
   };
 
