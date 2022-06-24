@@ -36,3 +36,6 @@ jobs:
       if: ${{ matrix.os == 'windows-latest' }}
     - run: npm run lint
     - run: npm run package
+      if: ${{ matrix.os != 'windows-latest' }}
+    - run: npm run package:windows
+      if: ${{ matrix.os == 'windows-latest' }}
