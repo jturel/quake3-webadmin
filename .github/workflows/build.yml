@@ -12,10 +12,11 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
+        os: [windows-latest, ubuntu-latest]
         node-version: [16.x]
 
     env:
@@ -30,5 +31,11 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm test
+      if: ${{ matrix.os != 'windows-latest' }}
+    - run: npm run test:windows
+      if: ${{ matrix.os == 'windows-latest' }}
     - run: npm run lint
     - run: npm run package
+      if: ${{ matrix.os != 'windows-latest' }}
+    - run: npm run package:windows
+      if: ${{ matrix.os == 'windows-latest' }}

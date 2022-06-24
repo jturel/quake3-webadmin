@@ -18,6 +18,9 @@
       "target": [
         "AppImage"
       ]
+    },
+    "win": {
+
     }
   },
   "dependencies": {
@@ -39,7 +42,9 @@
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "package": "npm run build && cp electron.js build/ && mkdir build/src && cp src/server -R build/src/ && cp src/shared -R build/src/ && electron-builder build",
+    "package:windows": "npm run build&&copy electron.js build/&&mkdir build/src&&copy src/server build/src/&&copy src/shared build/src/&&electron-builder build",
     "test": "NODE_ENV=test react-scripts test",
+    "test:windows": "set NODE_ENV=test&&react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/",
     "electron": "electron ."
