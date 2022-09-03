@@ -1,28 +1,76 @@
-import {useState} from 'react';
-import logo from './assets/images/logo-universal.png';
-import './App.css';
-import {Greet} from "../wailsjs/go/main/App";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+} from 'rebass';
+
+import {
+  BrowserRouter,
+  Link as RouterLink,
+  Route,
+  Routes,
+} from 'react-router-dom';
+
+import { useEffect, useRef } from 'react';
+
+import CreateServerForm from './components/CreateServerForm';
+import NotificationsSidebar from './components/NotificationsSidebar';
+import ServerList from './components/ServerList';
+import useNotifications from './useNotifications';
 
 function App() {
-    const [resultText, setResultText] = useState("Please enter your name below 👇");
-    const [name, setName] = useState('');
-    const updateName = (e) => setName(e.target.value);
-    const updateResultText = (result) => setResultText(result);
+  const [notifications, addNotification] = useNotifications();
+  const ws = useRef(null);
 
-    function greet() {
-        Greet(name).then(updateResultText);
+  useEffect(() => {
+    if (!ws.current) {
+      ws.current = new WebSocket("ws://localhost:3001/ws");
+      ws.current.onopen = () => console.log("Opened WebSocket connection.");
+      ws.current.onclose = () => console.log("Closed WebSocket connection.");
+      ws.current.onmessage = (event) => {
+        console.log(event.data);
+        addNotification(JSON.parse(event.data).message);
+      };
     }
+  }, [addNotification]);
 
-    return (
-        <div id="App">
-            <img src={logo} id="logo" alt="logo"/>
-            <div id="result" className="result">{resultText}</div>
-            <div id="input" className="input-box">
-                <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-                <button className="btn" onClick={greet}>Greet</button>
-            </div>
-        </div>
-    )
+  return (
+    <BrowserRouter>
+      <Flex>
+        <Box textAlign="center" width={1}>
+          <Heading>Quake 3 Web Admin</Heading>
+        </Box>
+      </Flex>
+      <Flex>
+        <Box width={1}>
+        </Box>
+        <Box width={1600}>
+          <Flex mb={3} mt={3}>
+            <RouterLink to="/servers/create">
+              <Text m={1}>
+                Create Server
+              </Text>
+            </RouterLink>
+            <RouterLink to="/">
+              <Text m={1}>
+                Server List
+              </Text>
+            </RouterLink>
+          </Flex>
+          <Flex>
+            <Routes>
+              <Route path="/" element={<ServerList addNotification={addNotification} />} />
+              <Route path="/servers/create" element={<CreateServerForm addNotification={addNotification} />} />
+            </Routes>
+          </Flex>
+        </Box>
+        <Box width={1}>
+          <NotificationsSidebar notifications={notifications} />
+        </Box>
+      </Flex>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
