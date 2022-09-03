@@ -1,0 +1,12 @@
+{
+  "name": "quake3-webadmin",
+  "outputfilename": "quake3-webadmin",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "Jonathon Turel",
+    "email": "jturel@gmail.com"
+  }
+}
