@@ -22,14 +22,18 @@ export default function ServerListItemDetails({ updateServer, handleSubmit, serv
     });
   };
 
+  const findVarByName = (vars, varName) => {
+    return vars.find(sVar => sVar.name === varName);
+  };
+
   const varFields = () => {
     return SERVER_OPTIONS.map((option) => {
-      const existingVar = server.Vars.find(sVar => sVar.Name === option.Name);
+      const existingVar = findVarByName(server.vars, option.name);
       return (
         <Box px={2}>
           <Label>{option.name}</Label>
           <Input
-            value={existingVar?.Name || ''}
+            value={existingVar?.value || ''}
             name={option.name}
             onChange={handleUpdateVar}
           />

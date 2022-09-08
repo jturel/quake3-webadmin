@@ -28,7 +28,7 @@ export default function ServerListItem({
       <Flex mb={1}>
         <Box width={200}>
           <Text>
-            { server.Vars.sv_hostname }:{ server.Vars.net_port }
+            { server.vars.sv_hostname }:{ server.vars.net_port }
           </Text>
         </Box>
         <Box width={400}>

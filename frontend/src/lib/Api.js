@@ -2,8 +2,27 @@ import axios from 'axios';
 
 import { LoadServers } from "../../wailsjs/go/main/App";
 
+const transformVar = (apiVar) => {
+  return { name: apiVar.Name, value: apiVar.Value };
+};
+
+const transformVars = (apiVars) => {
+  return apiVars.map(apiVar => transformVar(apiVar));
+};
+
+const transformServer = (apiServer) => {
+  return {
+    uuid: apiServer.Uuid,
+    vars: transformVars(apiServer.Vars),
+  };
+};
+
+const transformServers = (apiServers) => {
+  return apiServers.map(server => transformServer(server));
+};
+
 export const loadServers = () => {
-  return LoadServers();
+  return LoadServers().then(transformServers);
 };
 
 export const findServer = (uuid) => {

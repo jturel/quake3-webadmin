@@ -76,7 +76,7 @@ export default function ServerList({ addNotification }) {
         {
           servers.map((server) => 
             <ServerListItem
-              key={server.Uuid}
+              key={server.uuid}
               handleLaunchServer={handleLaunchServer}
               handleDeleteServer={handleDeleteServer}
               handleStopServer={handleStopServer}
