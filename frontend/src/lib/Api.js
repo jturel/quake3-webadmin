@@ -1,9 +1,9 @@
 import axios from 'axios';
 
+import { LoadServers } from "../../wailsjs/go/main/App";
+
 export const loadServers = () => {
-  return axios.get('http://localhost:3001/api/v1/servers').then((response) => {
-    return response.data.result;
-  });
+  return LoadServers();
 };
 
 export const findServer = (uuid) => {

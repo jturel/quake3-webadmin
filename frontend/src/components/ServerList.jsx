@@ -18,12 +18,17 @@ import {
 } from 'rebass';
 
 export default function ServerList({ addNotification }) {
-
   const [servers, setServers] = useState([]);
   const [creating] = useState(false);
 
   useEffect(() => {
-    loadServers().then(setServers);
+    /*
+   window.runtime.EventsOn('servers:load', (servers) => {
+     console.log("got servers");
+     console.log(servers);
+   });
+   */
+   loadServers().then(setServers);
   }, []);
 
   const handleDeleteServer = async (event) => {
@@ -71,7 +76,7 @@ export default function ServerList({ addNotification }) {
         {
           servers.map((server) => 
             <ServerListItem
-              key={server.id}
+              key={server.Uuid}
               handleLaunchServer={handleLaunchServer}
               handleDeleteServer={handleDeleteServer}
               handleStopServer={handleStopServer}
