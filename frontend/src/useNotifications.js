@@ -1,21 +1,19 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-export default function useNotifications(Component) {
-  const [notifications, setNotifications] = useState([]);
+export default function useNotifications() {
+  const [notifications, setNotifications] = useState([])
 
   const addNotification = (notification) => {
-    setNotifications((prev) => {
-      return [ notification, ...prev ];
-    });
+    setNotifications((prev) => [notification, ...prev])
 
     setTimeout(() => {
       setNotifications((prev) => {
-        const withoutLast = [ ...prev ];
-        withoutLast.pop();
-        return withoutLast;
-      });
-    }, 5000);
-  };
+        const withoutLast = [...prev]
+        withoutLast.pop()
+        return withoutLast
+      })
+    }, 5000)
+  }
 
-  return [notifications, addNotification];
-};
+  return [notifications, addNotification]
+}

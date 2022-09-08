@@ -1,62 +1,47 @@
-import axios from 'axios';
+import axios from 'axios'
 
-import { LoadServers } from "../../wailsjs/go/main/App";
+import { LoadServers } from '../../wailsjs/go/main/App'
 
-const transformVar = (apiVar) => {
-  return { name: apiVar.Name, value: apiVar.Value };
-};
+const transformVar = (apiVar) => ({ name: apiVar.Name, value: apiVar.Value })
 
-const transformVars = (apiVars) => {
-  return apiVars.map(apiVar => transformVar(apiVar));
-};
+const transformVars = (apiVars) => apiVars.map((apiVar) => transformVar(apiVar))
 
-const transformServer = (apiServer) => {
-  return {
-    uuid: apiServer.Uuid,
-    vars: transformVars(apiServer.Vars),
-  };
-};
+const transformServer = (apiServer) => ({
+  uuid: apiServer.Uuid,
+  vars: transformVars(apiServer.Vars),
+})
 
-const transformServers = (apiServers) => {
-  return apiServers.map(server => transformServer(server));
-};
+const transformServers = (apiServers) =>
+  apiServers.map((server) => transformServer(server))
 
-export const loadServers = () => {
-  return LoadServers().then(transformServers);
-};
+export const loadServers = () => LoadServers().then(transformServers)
 
-export const findServer = (uuid) => {
-  return axios.get(`http://localhost:3001/api/v1/servers/${uuid}`).then((response) => {
-    return response.data.result;
-  });
-};
+export const findServer = (uuid) =>
+  axios
+    .get(`http://localhost:3001/api/v1/servers/${uuid}`)
+    .then((response) => response.data.result)
 
-export const createServer = (server) => {
-  return axios.post('http://localhost:3001/api/v1/servers', server).then((response) => {
-    return response.data.result;
-  });
-};
+export const createServer = (server) =>
+  axios
+    .post('http://localhost:3001/api/v1/servers', server)
+    .then((response) => response.data.result)
 
-export const updateServer = (server) => {
-  return axios.put(`http://localhost:3001/api/v1/servers/${server.id}`, server).then((response) => {
-    return response.data.result;
-  });
-};
+export const updateServer = (server) =>
+  axios
+    .put(`http://localhost:3001/api/v1/servers/${server.id}`, server)
+    .then((response) => response.data.result)
 
-export const deleteServer = (uuid) => {
-  return axios.delete(`http://localhost:3001/api/v1/servers/${uuid}`).then((response) => {
-    return response.data.result;
-  });
-};
+export const deleteServer = (uuid) =>
+  axios
+    .delete(`http://localhost:3001/api/v1/servers/${uuid}`)
+    .then((response) => response.data.result)
 
-export const launchServer = (uuid) => {
-  return axios.post(`http://localhost:3001/api/v1/servers/${uuid}/launch`).then((response) => {
-    return response.data.result;
-  });
-};
+export const launchServer = (uuid) =>
+  axios
+    .post(`http://localhost:3001/api/v1/servers/${uuid}/launch`)
+    .then((response) => response.data.result)
 
-export const stopServer = (uuid) => {
-  return axios.post(`http://localhost:3001/api/v1/servers/${uuid}/stop`).then((response) => {
-    return response.data.result;
-  });
-};
+export const stopServer = (uuid) =>
+  axios
+    .post(`http://localhost:3001/api/v1/servers/${uuid}/stop`)
+    .then((response) => response.data.result)

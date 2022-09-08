@@ -72,8 +72,6 @@ const SERVER_OPTIONS = [
   {
     name: 'g_quadfactor',
   },
-];
+]
 
-export {
-  SERVER_OPTIONS,
-};
+export { SERVER_OPTIONS }
