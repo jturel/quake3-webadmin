@@ -14,22 +14,19 @@
     "rebass": "^4.0.7"
   },
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
+    "format": "prettier --write \"{,!(node_modules|wailsjs|dist)/**/}*.js\"",
+    "lint": "eslint ./src/",
     "preview": "vite preview",
-    "test": "jest",
-    "lint": "eslint ./src/"
+    "test": "jest"
   },
   "eslintConfig": {
     "extends": [
       "@imaginary-cloud/react"
     ]
   },
-  "prettierConfig": {
-    "extends": [
-      "@imaginary-cloud/react"
-    ]
-  },
+  "prettier": "@imaginary-cloud/prettier-config",
   "browserslist": {
     "production": [
       ">0.2%",
