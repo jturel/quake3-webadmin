@@ -1,9 +1,10 @@
 package main
 
 import (
-	"context"
-	"fmt"
+        "context"
+        "fmt"
         "github.com/google/uuid"
+        "os/exec"
 )
 
 // App struct
@@ -33,21 +34,54 @@ type ApiServerVar struct {
   Value string
 }
 
+func (a *App) FindServer(uuidIn string) ApiServer {
+  return ApiServer {
+    Uuid: uuid.New(),
+    Vars: []ApiServerVar {
+      ApiServerVar {
+        Name: "sv_hostname",
+        Value: "example.com",
+      },
+    },
+  }
+}
+
+func (a *App) LaunchServer(uuid string) {
+  fmt.Println("launching erver")
+  fmt.Println(uuid)
+  serverCommand := exec.Command("/home/jturel/code/ioq3-main/build/release-linux-x86_64/ioq3ded.x86_64")
+
+  server := a.FindServer(uuid)
+  fmt.Println(server)
+
+  result, err := serverCommand.Output()
+
+  if err != nil {
+    panic(err)
+  }
+
+  fmt.Println(string(result))
+
+}
+
 func (a *App) LoadServers() []ApiServer {
-        var servers []ApiServer = make([]ApiServer, 0, 0)
-        var server ApiServer
-        server.Name = "test"
-        server.Uuid = uuid.New()
+        servers := []ApiServer {
+          ApiServer {
+            Uuid: uuid.New(),
+            Vars: []ApiServerVar {
+              ApiServerVar {
+                Name: "sv_hostname",
+                Value: "example.com",
+              },
+              ApiServerVar {
+                Name: "net_port",
+                Value: "27960",
+              },
+            },
+          },
+        }
 
-        var serverVars = make([]ApiServerVar, 0, 0)
-        var serverVar ApiServerVar
-        serverVar.Name = "sv_hostname"
-        serverVar.Value = "example.com"
+        fmt.Println(servers)
 
-        serverVars = append(serverVars, serverVar)
-        server.Vars = serverVars
-
-        servers = append(servers, server)
-        fmt.Println(server)
         return servers;
 }

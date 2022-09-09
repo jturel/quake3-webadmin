@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { LoadServers } from '../../wailsjs/go/main/App'
+import { LaunchServer, LoadServers } from '../../wailsjs/go/main/App'
 
 const transformVar = (apiVar) => ({ name: apiVar.Name, value: apiVar.Value })
 
@@ -38,10 +38,7 @@ const deleteServer = (uuid) =>
     .delete(`http://localhost:3001/api/v1/servers/${uuid}`)
     .then((response) => response.data.result)
 
-const launchServer = (uuid) =>
-  axios
-    .post(`http://localhost:3001/api/v1/servers/${uuid}/launch`)
-    .then((response) => response.data.result)
+const launchServer = (uuid) => LaunchServer(uuid)
 
 const stopServer = (uuid) =>
   axios

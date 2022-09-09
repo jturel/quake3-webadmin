@@ -10,6 +10,7 @@ import {
 } from '@rebass/forms';
 
 import { SERVER_OPTIONS } from '../shared/ServerOptions';
+import { findVarByName } from '../lib/utils'
 
 export default function ServerListItemDetails({ updateServer, handleSubmit, server }) {
   const handleUpdateVar = (event) => {
@@ -20,10 +21,6 @@ export default function ServerListItemDetails({ updateServer, handleSubmit, serv
         [event.target.name]: event.target.value,
       }
     });
-  };
-
-  const findVarByName = (vars, varName) => {
-    return vars.find(sVar => sVar.name === varName);
   };
 
   const varFields = () => {

@@ -7,6 +7,7 @@ import {
 
 import React, { useState } from 'react';
 import ServerListItemDetails from './ServerListItemDetails';
+import { findVarByName } from '../lib/utils'
 
 export default function ServerListItem({
   handleDeleteServer,
@@ -28,7 +29,7 @@ export default function ServerListItem({
       <Flex mb={1}>
         <Box width={200}>
           <Text>
-            { server.vars.sv_hostname }:{ server.vars.net_port }
+            { findVarByName(server.vars, 'sv_hostname').value }:{ findVarByName(server.vars, 'net_port').value }
           </Text>
         </Box>
         <Box width={400}>
