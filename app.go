@@ -2,14 +2,53 @@ package main
 
 import (
         "context"
+        "encoding/json"
         "fmt"
         "github.com/google/uuid"
+        "os"
         "os/exec"
 )
+
+type ServerManager struct {
+  //servers map[string] ApiServer
+  servers []ApiServer
+
+}
+
+func (sm *ServerManager) loadDatabase() {
+  var fileData []byte
+
+  fileData, err := os.ReadFile("serverDb.json")
+
+  if (err != nil) {
+    panic(err)
+  }
+
+  var fileServers[]ApiServer
+  json.Unmarshal(fileData, &fileServers)
+
+  fmt.Println(fileServers)
+
+  sm.servers = fileServers
+}
+
+func (sm *ServerManager) writeServerDb() {
+  fileData, _ := json.MarshalIndent(sm.servers, "", " ")
+
+  err := os.WriteFile("serverDb.json", fileData, 0644)
+
+  if (err != nil) {
+    panic(err)
+  }
+
+  fmt.Println("Saved server database")
+}
+
 
 // App struct
 type App struct {
 	ctx context.Context
+        serverManager ServerManager
 }
 
 // NewApp creates a new App application struct
@@ -21,6 +60,13 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+        a.serverManager = ServerManager { }
+        a.serverManager.loadDatabase()
+}
+
+func (a *App) shutdown(ctx context.Context) {
+  fmt.Println("\n\n\n\nshutting down")
+  a.serverManager.writeServerDb()
 }
 
 type ApiServer struct {
@@ -35,23 +81,14 @@ type ApiServerVar struct {
 }
 
 func (a *App) FindServer(uuidIn string) ApiServer {
-  return ApiServer {
-    Uuid: uuid.New(),
-    Vars: []ApiServerVar {
-      ApiServerVar {
-        Name: "sv_hostname",
-        Value: "example.com",
-      },
-    },
-  }
+  return generateApiServer()
 }
 
 func (a *App) LaunchServer(uuid string) {
   fmt.Println("launching erver")
-  fmt.Println(uuid)
   serverCommand := exec.Command("/home/jturel/code/ioq3-main/build/release-linux-x86_64/ioq3ded.x86_64")
 
-  server := a.FindServer(uuid)
+  server := generateApiServer()
   fmt.Println(server)
 
   result, err := serverCommand.Output()
@@ -64,24 +101,22 @@ func (a *App) LaunchServer(uuid string) {
 
 }
 
+func generateApiServer() ApiServer {
+  return ApiServer {
+    Uuid: uuid.New(),
+    Vars: []ApiServerVar {
+      ApiServerVar {
+        Name: "sv_hostname",
+        Value: "example.com",
+      },
+      ApiServerVar {
+        Name: "net_port",
+        Value: "27960",
+      },
+    },
+  }
+}
+
 func (a *App) LoadServers() []ApiServer {
-        servers := []ApiServer {
-          ApiServer {
-            Uuid: uuid.New(),
-            Vars: []ApiServerVar {
-              ApiServerVar {
-                Name: "sv_hostname",
-                Value: "example.com",
-              },
-              ApiServerVar {
-                Name: "net_port",
-                Value: "27960",
-              },
-            },
-          },
-        }
-
-        fmt.Println(servers)
-
-        return servers;
+        return a.serverManager.servers
 }

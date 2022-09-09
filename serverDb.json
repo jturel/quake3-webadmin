@@ -1,0 +1,30 @@
+[
+ {
+  "Name": "",
+  "Uuid": "2ea1451b-a9f0-4bd3-a17a-4bdffa917883",
+  "Vars": [
+   {
+    "Name": "sv_hostname",
+    "Value": "example.com"
+   },
+   {
+    "Name": "net_port",
+    "Value": "27960"
+   }
+  ]
+ },
+ {
+  "Name": "",
+  "Uuid": "fb8a3a1a-b3b4-421d-bf8d-c80181ed5fe4",
+  "Vars": [
+   {
+    "Name": "sv_hostname",
+    "Value": "example.com"
+   },
+   {
+    "Name": "net_port",
+    "Value": "27960"
+   }
+  ]
+ }
+]
