@@ -1,20 +1,11 @@
 import { useState } from 'react';
-import { createServer } from '../lib/Api';
 import { useNavigate } from 'react-router-dom';
 
 import ServerListItemDetails from './ServerListItemDetails';
 import { SERVER_OPTIONS } from '../shared/ServerOptions';
 
-export default function CreateServerForm({addNotification}) {
-  const defaultOptions = () => {
-    let options = {};
-    SERVER_OPTIONS.forEach((o) => {
-      options[o.name] = o.default;
-    });
-    return options;
-  };
-
-  const [server, setServer] = useState({ vars: defaultOptions() });
+export default function CreateServerForm({ createServer, addNotification}) {
+  const [server, setServer] = useState({ vars: SERVER_OPTIONS });
 
   const navigate = useNavigate();
 

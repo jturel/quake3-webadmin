@@ -18,6 +18,7 @@ import CreateServerForm from './components/CreateServerForm';
 import NotificationsSidebar from './components/NotificationsSidebar';
 import ServerList from './components/ServerList';
 import useNotifications from './useNotifications';
+import serverApi from './lib/Api';
 
 function App() {
   const [notifications, addNotification] = useNotifications();
@@ -47,8 +48,8 @@ function App() {
           </Flex>
           <Flex>
             <Routes>
-              <Route path="/" element={<ServerList addNotification={addNotification} />} />
-              <Route path="/servers/create" element={<CreateServerForm addNotification={addNotification} />} />
+              <Route path="/" element={<ServerList serverApi={serverApi} addNotification={addNotification} />} />
+              <Route path="/servers/create" element={<CreateServerForm createServer={serverApi.createServer} addNotification={addNotification} />} />
             </Routes>
           </Flex>
         </Box>

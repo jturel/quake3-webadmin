@@ -1,13 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {
-  deleteServer,
-  findServer,
-  launchServer,
-  loadServers,
-  stopServer,
-  updateServer as apiUpdateServer,
-} from '../lib/Api';
-
 import ServerListItem from './ServerListItem';
 import CreateServerForm from './CreateServerForm';
 
@@ -17,28 +8,22 @@ import {
   Heading
 } from 'rebass';
 
-export default function ServerList({ addNotification }) {
+export default function ServerList({ serverApi, addNotification }) {
   const [servers, setServers] = useState([]);
   const [creating] = useState(false);
 
   useEffect(() => {
-    /*
-   window.runtime.EventsOn('servers:load', (servers) => {
-     console.log("got servers");
-     console.log(servers);
-   });
-   */
-   loadServers().then(setServers);
+   serverApi.loadServers().then(setServers);
   }, []);
 
   const handleDeleteServer = async (event) => {
-    await deleteServer(event.target.value);
+    await serverApi.deleteServer(event.target.value);
     setServers(servers.filter((server) => server.id !== event.target.value));
   };
 
   const handleSaveServer = async (event) => {
     const server = servers.find((s) => s.id === event.target.value);
-    await apiUpdateServer(server);
+    await serverApi.UpdateServer(server);
   };
 
   const updateServer = (server) => {
@@ -54,17 +39,17 @@ export default function ServerList({ addNotification }) {
   };
 
   const reloadServer = async(uuid) => {
-    const reloaded = await findServer(uuid);
+    const reloaded = await serverApi.findServer(uuid);
     updateServer(reloaded);
   };
 
   const handleLaunchServer = async (event) => {
-    await launchServer(event.target.value);
+    await serverApi.launchServer(event.target.value);
     await reloadServer(event.target.value);
   };
 
   const handleStopServer = async (event) => {
-    await stopServer(event.target.value);
+    await serverApi.stopServer(event.target.value);
     await reloadServer(event.target.value);
   };
 

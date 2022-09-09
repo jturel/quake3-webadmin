@@ -4,9 +4,13 @@ import { BrowserRouter } from 'react-router-dom'
 import CreateServerForm from './CreateServerForm'
 
 test('renders the form', () => {
+  const server = {
+    vars: [],
+  }
+
   render(
     <BrowserRouter>
-      <CreateServerForm />
+      <CreateServerForm server={server} />
     </BrowserRouter>,
   )
 })
