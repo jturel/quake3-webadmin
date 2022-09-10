@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { LaunchServer, LoadServers } from '../../wailsjs/go/main/App'
+import { CreateServer, LaunchServer, LoadServers, UpdateServer } from '../../wailsjs/go/main/App'
 
 const transformVar = (apiVar) => ({ name: apiVar.Name, value: apiVar.Value })
 
@@ -9,7 +9,7 @@ const transformVars = (apiVars) => apiVars.map((apiVar) => transformVar(apiVar))
 class ServerApi {}
 
 const transformServer = (apiServer) => ({
-  uuid: apiServer.Uuid,
+  id: apiServer.Uuid,
   vars: transformVars(apiServer.Vars),
 })
 
@@ -23,15 +23,9 @@ const findServer = (uuid) =>
     .get(`http://localhost:3001/api/v1/servers/${uuid}`)
     .then((response) => response.data.result)
 
-const createServer = (server) =>
-  axios
-    .post('http://localhost:3001/api/v1/servers', server)
-    .then((response) => response.data.result)
+const createServer = (server) => CreateServer(toApiServer(server))
 
-const updateServer = (server) =>
-  axios
-    .put(`http://localhost:3001/api/v1/servers/${server.id}`, server)
-    .then((response) => response.data.result)
+const updateServer = (server) => UpdateServer(server)
 
 const deleteServer = (uuid) =>
   axios

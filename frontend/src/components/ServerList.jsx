@@ -23,7 +23,7 @@ export default function ServerList({ serverApi, addNotification }) {
 
   const handleSaveServer = async (event) => {
     const server = servers.find((s) => s.id === event.target.value);
-    await serverApi.UpdateServer(server);
+    await serverApi.updateServer(server);
   };
 
   const updateServer = (server) => {
@@ -38,8 +38,8 @@ export default function ServerList({ serverApi, addNotification }) {
     });
   };
 
-  const reloadServer = async(uuid) => {
-    const reloaded = await serverApi.findServer(uuid);
+  const reloadServer = async(id) => {
+    const reloaded = await serverApi.findServer(id);
     updateServer(reloaded);
   };
 
@@ -61,7 +61,7 @@ export default function ServerList({ serverApi, addNotification }) {
         {
           servers.map((server) => 
             <ServerListItem
-              key={server.uuid}
+              key={server.id}
               handleLaunchServer={handleLaunchServer}
               handleDeleteServer={handleDeleteServer}
               handleStopServer={handleStopServer}
